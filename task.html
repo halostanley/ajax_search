@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head><title>Task #2</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("input[id='prefix']").on('input', function () {
+                if ($("input[id='prefix']").val().length > 0) {
+                    let searchS = $("input[id='prefix']").val();
+                    $.ajax({
+                        url: "getNames.php",
+                        method: 'GET',
+                        dataType: "json",
+                        data: {S: searchS},
+                        success: function (data) {
+                            let data_length = Object.keys(data).length;
+                            $("ul.namelist li").remove();
+                            if (data_length > 0) {
+                                $.each(data, function (index, val) {
+                                    $("#output").append("<li>" + val + "</li>");
+                                });
+                            } else {
+                                $("#output").append("<li>No result(s) or Case sensitive!!!</li>");
+                            }
+                        },
+                        error: function () {
+                            alert("Ajax Error!!!");
+                        }
+                    });
+                } else {
+                    $("ul.namelist li").remove();
+                }
+
+            });
+        });
+    </script>
+    <style>
+        #output {
+            color: rgb(255, 64, 64);
+            padding: 0;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <input id="prefix" placeholder="Enter a string here ...">
+</div>
+<hr>
+
+<ul id="output" class="namelist"></ul>
+
+</body>
+</html>
